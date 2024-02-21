@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -43,3 +43,19 @@ class LogOutAPIView(APIView):
         
 class LoginRefreshAPIVIew(TokenRefreshView):
     serializer_class = serializers.LoginRefreshSerializer
+    
+    
+# class UserProfileAPIView(RetrieveAPIView):
+#     serializer_class = serializers.UserSerializer
+#     queryset = User.objects.filter()
+
+class UserProfileAPIView(APIView):
+    def get(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+            serializer = serializers.UserSerializer(user)
+            return Response({
+                'data': serializer.data, 'status': status.HTTP_200_OK
+            })
+        except User.DoesNotExist:
+            return Response({'error': serializer.errors, 'status': status.HTTP_400_BAD_REQUEST})

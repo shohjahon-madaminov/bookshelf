@@ -12,6 +12,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from apps.users.models import User
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'image', 'email', 'name', 'username')
+
+
 class SignUpSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     
